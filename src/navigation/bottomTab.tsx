@@ -4,11 +4,17 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 
 // Screens
-import { HomeScreen, CartScreen } from '../screens';
+import { HomeScreen } from '../screens';
+import StackNavigator from './stack-navigator';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
-const BottomTab = () => {
+export type BottomTabParams = {
+  'Home': undefined;
+  'Cart': undefined;
+}
+
+const BottomTabNavigation = () => {
   return (
     <Navigator
       initialRouteName='Home'
@@ -29,15 +35,16 @@ const BottomTab = () => {
       />
       <Screen
         name='Cart'
-        component={CartScreen}
+        component={StackNavigator}
         options={{
           tabBarIcon: ({ focused, size, color }) => {
             return <Ionicons name={focused ? 'ios-cart' : 'ios-cart-outline'} size={size} color={color} />
-          }
+          },
+          headerShown: false
         }}
       />
     </Navigator>
   )
 }
 
-export default BottomTab
+export default BottomTabNavigation

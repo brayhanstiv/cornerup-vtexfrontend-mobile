@@ -32,9 +32,8 @@ const HomeScreen = () => {
 
 const styles = StyleSheet.create({
   flexRow: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "column",
+    flexWrap: "nowrap",
   }
 })
 

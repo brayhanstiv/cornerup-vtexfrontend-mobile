@@ -126,3 +126,169 @@ export const applyCoupon = async (
   }
   );
 }
+
+// Add Client Profile
+export const addClientProfile = async (ofid: string, body: any) => {
+  const url = _orderRequest(`/${ofid}/attachments/clientProfileData`);
+  const encodedJson = JSON.stringify({
+    'email': body.email,
+    'firstName': body.firstName,
+    'lastName': body.lastName,
+    'documentType': body.documentType,
+    'document': body.document,
+    'phone': body.phone,
+  });
+
+  await fetch(
+    url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: encodedJson,
+  }
+  );
+}
+
+// Add Shipping Address
+export const addShippingAddress = async (ofid: string, body: any) => {
+  const url = _orderRequest(`/${ofid}/attachments/shippingData`);
+  const encodedJson = JSON.stringify({
+    'paymentSysytem': body.paymentSystem,
+    'city': body.city,
+    'state': body.state,
+    'country': body.country,
+    'complement': body.complement,
+  });
+
+  await fetch(
+    url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: encodedJson,
+  }
+  );
+}
+
+// Add Payment Data
+export const addPaymentData = async (ofid: string, body: any) => {
+  const url = _orderRequest(`/${ofid}/attachments/paymentData`);
+  const encodedJson = JSON.stringify({
+    "payments": [
+      {
+        "hasDefaultBillingAddress": true,
+        "installmentsInterestRate": null,
+        "referenceValue": 8106000,
+        "bin": null,
+        "accountId": null,
+        "value": 8106000,
+        "tokenId": null,
+        "paymentSystem": "2",
+        "installments": null
+      }
+    ],
+    "giftCards": [
+      {
+        "id": "_1867",
+        "redemptionCode": "WBKY-WDHH-FBKE-VLBE",
+        "value": 4893000,
+        "balance": 4893000,
+        "name": null,
+        "inUse": true,
+        "isSpecialCard": false,
+        "provider": "VtexGiftCard"
+      }
+    ],
+    "expectedOrderFormSections": [
+      "items",
+      "totalizers",
+      "clientProfileData",
+      "shippingData",
+      "paymentData",
+      "sellers",
+      "messages",
+      "marketingData",
+      "clientPreferencesData",
+      "storePreferencesData",
+      "giftRegistryData",
+      "ratesAndBenefitsData",
+      "openTextField",
+      "commercialConditionData",
+      "customData"
+    ]
+  });
+
+  await fetch(
+    url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: encodedJson,
+  }
+  );
+}
+
+// Place order from an existing cart
+export const createOrder = async (ofid: string, body: any) => {
+  const url = _orderRequest(`/${ofid}/transaction`);
+  const encodedJson = JSON.stringify({
+    "referenceId": ofid,
+    "savePersonalData": false,
+    "optinNewsLetter": false,
+    "value": 6800,
+    "referenceValue": 6800,
+    "interestValue": 0
+  });
+
+  await fetch(
+    url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: encodedJson,
+  }
+  );
+}
+
+// Add Payment Transaction
+export const addPaymentTransaction = async (transactionId: string) => {
+  const url = `https://cornerup.myvtex.com/api/pub/transactions/${transactionId}/payments`;
+  const encodedJson = JSON.stringify({
+    "paymentSystem": "201",
+    "paymentSystemName": "Pago contra entrega",
+    "group": "custom201PaymentGroupPaymentGroup",
+    "installments": 1,
+    "installmentsInterestRate": 0,
+    "installmentsValue": 11000000,
+    "value": 11000000,
+    "referenceValue": 11000000,
+    "fields": {
+      "holderName": "Andres Ramirez",
+      "cardNumber": "4111 1111 1111 1111",
+      "validationCode": "231",
+      "dueDate": "12/22",
+      "addressId": "1620245085681"
+    },
+    "transaction": {
+      "id": "AAFF95C0345E4349A44AFC9AEA5D1D01",
+      "merchantName": "EXPERIMENTALITY"
+    },
+    "currencyCode": "COP"
+  });
+
+  await fetch(
+    url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: encodedJson,
+  }
+  );
+}
+
+// Process order
+export const processOrder = async (orderGroup: string) => {
+  const url = `https://cornerup.myvtex.com/api/checkout/pub/gatewayCallback/${orderGroup}`;
+
+  await fetch(
+    url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" }
+  }
+  );
+}

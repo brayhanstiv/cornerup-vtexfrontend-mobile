@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { Image, Text, View, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { ProductShopping } from '../../interfaces/orderForm.model';
@@ -8,6 +9,8 @@ const CartScreen = () => {
   const [ofid, setOfid] = useState<string>();
   const [products, setProducts] = useState<ProductShopping[]>();
   const [code, setCode] = useState<string>('');
+
+  const navigation = useNavigation<any>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,39 +40,49 @@ const CartScreen = () => {
 
   return (
     <View style={styles.flexColumn}>
-      {products != null ? products.map((item: ProductShopping, index) => (
-        <View key={item.skuId} style={styles.container}>
-          <Image style={styles.img} source={{ uri: item.imageUrl }} />
-          <View >
-            <Text>{item.name}</Text>
-            <View style={styles.alignHorizontal}>
-              <Text style={styles.price}>{item.price / 100}</Text>
-              <Text style={styles.sellingPrice}>{item.sellingPrice / 100}</Text>
+      <View>
+        {products != null ? products.map((item: ProductShopping, index) => (
+          <View key={item.skuId} style={styles.container}>
+            <Image style={styles.img} source={{ uri: item.imageUrl }} />
+            <View >
+              <Text>{item.name}</Text>
+              <View style={styles.alignHorizontal}>
+                <Text style={styles.price}>{item.price / 100}</Text>
+                <Text style={styles.sellingPrice}>{item.sellingPrice / 100}</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => removeItem(index)}
+              >
+                <Text>Remove from Cart</Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => removeItem(index)}
-            >
-              <Text>Remove from Cart</Text>
-            </TouchableOpacity>
           </View>
+        ))
+          : <Text>Loading ...</Text>
+        }
+      </View>
+      <View>
+        <View style={styles.alignHorizontal}>
+          <TextInput
+            style={styles.input}
+            value={code}
+            onChangeText={(value) => setCode(value)}
+            placeholder="Type Code"
+            keyboardType="default"
+          />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => applyCode(code)}
+          >
+            <Text>Apply code</Text>
+          </TouchableOpacity>
         </View>
-      ))
-        : <Text>Loading ...</Text>
-      }
-      <View style={styles.alignHorizontal}>
-        <TextInput
-          style={styles.input}
-          value={code}
-          onChangeText={(value) => setCode(value)}
-          placeholder="Type Code"
-          keyboardType="default"
-        />
         <TouchableOpacity
-          style={styles.button}
-          onPress={() => applyCode(code)}
+          style={styles.buttonNext}
+          onPress={() => navigation.navigate('Shipping')}
         >
-          <Text>Apply code</Text>
+          <Text style={styles.text}>Proceed to Buy</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -117,6 +130,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 5,
     borderRadius: 5
+  },
+  buttonNext: {
+    backgroundColor: '#FF1034',
+    paddingHorizontal: 20,
+    paddingVertical: 10
+  },
+  text: {
+    color: '#fff'
   }
 })
 

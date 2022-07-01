@@ -51,7 +51,6 @@ const ProductCard = ({ product }: Props) => {
 
 const styles = StyleSheet.create({
   card: {
-    flex: 0.48,
     margin: 10,
     padding: 10,
     borderRadius: 10,
